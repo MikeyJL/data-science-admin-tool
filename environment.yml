@@ -8,4 +8,5 @@ dependencies:
   - django
   - black
   - pre-commit
-  - pyright
+  - mypy
+  - django-stubs[compatible-mypy]
