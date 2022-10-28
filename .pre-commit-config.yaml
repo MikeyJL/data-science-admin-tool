@@ -19,3 +19,4 @@ repos:
       - id: mypy
         additional_dependencies:
           - django-stubs
+        exclude: migrations/
