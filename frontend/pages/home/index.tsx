@@ -7,7 +7,10 @@ const HomePage = () => {
 	return (
 		<div>
 			<Txt type="title">Home Page</Txt>
-			<PrimaryButton label="Profile" onClick={() => navigate("/profile")} />
+			<PrimaryButton
+				label="Got to Profile"
+				onClick={() => navigate("/profile")}
+			/>
 		</div>
 	);
 };

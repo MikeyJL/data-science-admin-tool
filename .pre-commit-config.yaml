@@ -22,7 +22,8 @@ repos:
     rev: v8.26.0
     hooks:
       - id: eslint
-        files: frontend/\.tsx?$
+        files: ^frontend/
+        types_or: [ts, tsx]
         types: [file]
         additional_dependencies:
           - eslint-plugin-react
