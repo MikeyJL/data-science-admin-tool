@@ -161,3 +161,4 @@ cython_debug/
 
 # Frontend
 node_modules
+static/
