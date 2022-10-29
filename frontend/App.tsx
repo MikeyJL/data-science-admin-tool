@@ -1,7 +1,10 @@
+import { Txt } from "./components/elements";
+
+/** Main entry of app. */
 const App = () => {
 	return (
 		<div>
-			<h1>Hello world!</h1>
+			<Txt type="title">Hello there!</Txt>
 		</div>
 	);
 };
