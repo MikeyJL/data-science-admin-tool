@@ -1,12 +1,8 @@
-import { Txt } from "./components/elements";
+import MainNavigator from "./pages/main.navigator";
 
 /** Main entry of app. */
 const App = () => {
-	return (
-		<div>
-			<Txt type="title">Hello there!</Txt>
-		</div>
-	);
+	return <MainNavigator />;
 };
 
 export default App;

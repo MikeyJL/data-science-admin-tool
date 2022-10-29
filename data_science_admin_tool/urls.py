@@ -16,10 +16,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
+from django.urls.conf import re_path
+from .views import AppView
+
+API_VERSION = "api/v1"
 
 urlpatterns = [
-    path("projects/", include("projects.urls")),
+    path(f"{API_VERSION}/projects/", include("projects.urls")),
     path("admin/", admin.site.urls),
-    path("", TemplateView.as_view(template_name="index.html")),
+    path("/", AppView.as_view()),
+    re_path(r"^(?:.*)/?$", AppView.as_view()),
 ]
