@@ -2,7 +2,7 @@ import MainNavigator from "./pages/main.navigator";
 
 /** Main entry of app. */
 const App = () => {
-	return <MainNavigator />;
+  return <MainNavigator />;
 };
 
 export default App;
