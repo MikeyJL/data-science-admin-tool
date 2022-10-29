@@ -1,15 +1,23 @@
 {
   "name": "data_science_admin_tool",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "git@github.com:MikeyJL/data-science-admin-tool.git",
   "author": "Mikey Lau <63963445+MikeyJL@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development",
+    "dev:watch": "webpack --mode development --watch"
   },
   "devDependencies": {
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
