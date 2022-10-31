@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "projects.apps.ProjectsConfig",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "data_science_admin_tool.wsgi.application"
 
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+    ]
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

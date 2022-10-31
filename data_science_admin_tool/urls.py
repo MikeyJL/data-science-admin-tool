@@ -23,6 +23,7 @@ API_VERSION = "api/v1"
 
 urlpatterns = [
     path(f"{API_VERSION}/projects/", include("projects.urls")),
+    path("api-auth/", include("rest_framework.urls")),
     path("admin/", admin.site.urls),
     path("/", AppView.as_view()),
     re_path(r"^(?:.*)/?$", AppView.as_view()),

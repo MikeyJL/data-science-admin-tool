@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 django = "*"
 django-stubs = "*"
+djangorestframework = "*"
+markdown = "*"
+django-filter = "*"
+djangorestframework-stubs = "*"
 
 [dev-packages]
 flake8 = "*"
