@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 
+from dotenv import load_dotenv
 from pathlib import Path
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,6 +36,10 @@ ALLOWED_HOSTS: list[str] = []
 
 # Application definition
 
+LOCAL_APPS = [
+    "projects",
+]
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -40,9 +47,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "projects.apps.ProjectsConfig",
     "rest_framework",
 ]
+
+INSTALLED_APPS += LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -74,6 +82,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "data_science_admin_tool.wsgi.application"
 
+# AWS Cognito Configuration
+COGNITO_CONFIG = {
+    "url": "https://dsat.auth.eu-west-2.amazoncognito.com/oauth2/token",
+    "app_client_id": os.environ["AWS_APP_CLIENT_ID"],
+    "region": "ap-southeast-2",
+    "aws_user_pools_id": os.environ["AWS_USER_POOLS_ID"],
+    "aws_user_pools_web_client_id": os.environ["AWS_APP_CLIENT_ID"],
+}
+
+# Rest Framework settings
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"

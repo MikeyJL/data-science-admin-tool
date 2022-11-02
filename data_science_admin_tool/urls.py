@@ -21,7 +21,7 @@ from .views import AppView
 
 urlpatterns = [
     re_path("api/v1/projects/?", include("projects.urls")),
-    re_path("^(?:.*)/?$", AppView.as_view()),
+    re_path("^(?!api|admin).*", AppView.as_view()),
     path("api-auth/", include("rest_framework.urls")),
     path("admin/", admin.site.urls),
     path("/", AppView.as_view()),

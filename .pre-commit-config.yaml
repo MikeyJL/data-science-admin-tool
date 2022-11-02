@@ -20,6 +20,7 @@ repos:
           - django-stubs
           - djangorestframework
           - djangorestframework-stubs
+          - python-dotenv
         exclude: migrations/
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.26.0
