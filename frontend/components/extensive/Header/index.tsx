@@ -12,6 +12,7 @@ export const Header = () => {
       <div>
         <NavLink label="Dashboard" to="/" />
         <NavLink label="Profile" to="/profile" />
+        <a href="/admin">Admin</a>
       </div>
     </div>
   );

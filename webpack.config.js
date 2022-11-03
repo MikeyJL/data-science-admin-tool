@@ -1,4 +1,5 @@
 const path = require("path");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   entry: "./frontend/index.tsx",
@@ -23,4 +24,5 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, "./static"),
   },
+  plugins: [new Dotenv()],
 };
