@@ -64,6 +64,12 @@ class CognitoUser(AbstractBaseUser):
 
     USERNAME_FIELD = "email"
 
+    class Meta:
+        """Metadata about the user model."""
+
+        verbose_name = "User"
+        verbose_name_plural = "Users"
+
     def __str__(self) -> str:
         """Get the name of the email as the key.
 
