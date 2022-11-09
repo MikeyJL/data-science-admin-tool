@@ -1,11 +1,12 @@
 """Cognito authentication backend."""
 
 from typing import Optional
+
+from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import User
 from django.http.request import HttpRequest
 from pycognito import Cognito
-from django.contrib.auth.backends import BaseBackend
-from django.contrib.auth.models import User
 
 from data_science_admin_tool.settings import COGNITO_CONFIG
 
@@ -27,15 +28,18 @@ class CognitoBackend(BaseBackend):
             username: the username of the user.
             password: the password of the user.
         """
-        user = Cognito(**COGNITO_CONFIG, username=username)
-        user.authenticate(
-            password,
-        )
-        self.id_token = user.id_token
-        self.access_token = user.access_token
-        self.refresh_token = user.refresh_token
+        try:
+            user = Cognito(**COGNITO_CONFIG, username=username)
+            user.authenticate(
+                password,
+            )
+            self.id_token = user.id_token
+            self.access_token = user.access_token
+            self.refresh_token = user.refresh_token
 
-        return User.objects.get(username=username)
+            return User.objects.get(username=username)
+        except Exception:
+            return None
 
     def get_user(self, user_id: int) -> Optional[AbstractBaseUser]:
         """Get the currently signed-in user.
