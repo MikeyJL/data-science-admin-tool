@@ -72,7 +72,7 @@ class CognitoUser(AbstractBaseUser):
         """
         return self.email
 
-    def has_perm(self) -> bool:
+    def has_perm(self, perm: Any, obj: Any = None) -> bool:
         """Check if the user has permissions.
 
         Returns:
@@ -80,7 +80,7 @@ class CognitoUser(AbstractBaseUser):
         """
         return True
 
-    def has_module_perms(self) -> bool:
+    def has_module_perms(self, app_label: str) -> bool:
         """Check if the user has module permissions.
 
         Returns:
