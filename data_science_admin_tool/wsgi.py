@@ -1,5 +1,4 @@
-"""
-WSGI config for data_science_admin_tool project.
+"""WSGI config for data_science_admin_tool project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

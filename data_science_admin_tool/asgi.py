@@ -1,5 +1,4 @@
-"""
-ASGI config for data_science_admin_tool project.
+"""ASGI config for data_science_admin_tool project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

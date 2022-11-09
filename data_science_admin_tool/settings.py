@@ -84,11 +84,8 @@ WSGI_APPLICATION = "data_science_admin_tool.wsgi.application"
 
 # AWS Cognito Configuration
 COGNITO_CONFIG = {
-    "url": "https://dsat.auth.eu-west-2.amazoncognito.com/oauth2/token",
-    "app_client_id": os.environ["AWS_APP_CLIENT_ID"],
-    "region": "ap-southeast-2",
-    "aws_user_pools_id": os.environ["AWS_USER_POOLS_ID"],
-    "aws_user_pools_web_client_id": os.environ["AWS_APP_CLIENT_ID"],
+    "client_id": os.environ["AWS_APP_CLIENT_ID"],
+    "user_pool_id": os.environ["AWS_USER_POOL_ID"],
 }
 
 # Rest Framework settings
@@ -108,6 +105,11 @@ DATABASES = {
     }
 }
 
+# Auth backends
+
+AUTHENTICATION_BACKENDS = [
+    "cognito.authentication.CognitoBackend",
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
