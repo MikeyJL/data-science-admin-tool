@@ -1,4 +1,4 @@
 [flake8]
 max-line-length = 88
 extend-ignore = E203
-exclude = data_science_admin_tool/settings.py
+exclude = data_science_admin_tool/settings.py, migrations

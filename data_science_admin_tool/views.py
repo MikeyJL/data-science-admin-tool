@@ -1,9 +1,9 @@
-from typing import Any
+"""Django app views."""
+
 from django.views.generic import TemplateView
 
 
 class AppView(TemplateView):
-    template_name = "index.html"
+    """Django app view."""
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, str]:
-        return {"context_variable": "value"}
+    template_name = "index.html"

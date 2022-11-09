@@ -1,3 +1,5 @@
+"""Registers URLs for Project views."""
+
 from django.urls import path
 
 from .views import ProjectsView
