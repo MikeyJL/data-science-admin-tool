@@ -24,19 +24,13 @@ class UserCreationForm(ModelForm):  # type: ignore
         user = CognitoUser
         fields = ("email", "id")
 
-    def check_password(self) -> str | None:
-        """Check if the password matches.
-
-        Returns:
-            str | None: Either raises an error or returns the password.
-        """
+    def clean(self) -> None:
+        """Check if the password matches."""
         password = self.cleaned_data.get("password")
         password_confirmed = self.cleaned_data.get("password_confirmed")
 
         if password and password_confirmed and password != password_confirmed:
             raise ValidationError("Passwords must match")
-
-        return password_confirmed
 
     def save(self, commit: bool = True) -> Any:
         """Save the new user account.
