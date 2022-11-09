@@ -1,7 +1,8 @@
 """Contains models for projects."""
 
 from uuid import uuid4
-from django.db.models import Model, CharField, UUIDField
+
+from django.db.models import CharField, Model, UUIDField
 
 
 class Project(Model):

@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
-from pathlib import Path
 
 load_dotenv()
 
@@ -36,9 +36,7 @@ ALLOWED_HOSTS: list[str] = []
 
 # Application definition
 
-LOCAL_APPS = [
-    "projects",
-]
+LOCAL_APPS = ["projects", "cognito"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -110,6 +108,8 @@ DATABASES = {
 AUTHENTICATION_BACKENDS = [
     "cognito.authentication.CognitoBackend",
 ]
+
+AUTH_USER_MODEL = "cognito.CognitoUser"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
