@@ -9,10 +9,10 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.forms import CharField, ModelForm, PasswordInput
 
-from cognito.models import CognitoUser
+from .models import CognitoUser
 
 
-class UserCreationForm(ModelForm[Any]):
+class UserCreationForm(ModelForm):  # type: ignore
     """Form layout for creating a new user."""
 
     password = CharField(label="Password", widget=PasswordInput)
@@ -54,7 +54,7 @@ class UserCreationForm(ModelForm[Any]):
         return user
 
 
-class UserChangeForm(ModelForm[Any]):
+class UserChangeForm(ModelForm):  # type: ignore
     """Form layout for updating a user."""
 
     password = ReadOnlyPasswordHashField()
