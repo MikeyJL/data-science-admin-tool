@@ -16,7 +16,7 @@ class UserCreationForm(ModelForm):  # type: ignore
     """Form layout for creating a new user."""
 
     password = CharField(label="Password", widget=PasswordInput)
-    password_confirm = CharField(label="Confirm Password", widget=PasswordInput)
+    password_confirmed = CharField(label="Confirm Password", widget=PasswordInput)
 
     class Meta:
         """Metadata about relating user and fields."""
