@@ -19,7 +19,7 @@ export const PrimaryButton = ({
     <button
       onClick={onClick}
       className={classNames(
-        "px-4 py-2 bg-blue-800 text-white rounded-xl",
+        "px-4 py-2 bg-blue-800 text-white rounded-xl hover:opacity-80 transition-opacity",
         {
           "w-full": fullWidth,
         },
