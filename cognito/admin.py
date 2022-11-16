@@ -8,6 +8,9 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.forms import CharField, ModelForm, PasswordInput
+from pycognito import Cognito
+
+from data_science_admin_tool.settings import COGNITO_CONFIG
 
 from .models import CognitoUser
 
@@ -41,11 +44,20 @@ class UserCreationForm(ModelForm):  # type: ignore
         Returns:
             Any: the new user.
         """
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password"])
-        if commit:
+        email = self.cleaned_data["email"]
+        password = self.cleaned_data["password"]
+
+        user = CognitoUser()
+        user.set_password(password)
+
+        try:
+            u = Cognito(**COGNITO_CONFIG)
+            u.set_base_attributes(email=email)
+            u.register(email, password)
             user.save()
-        return user
+            return user
+        except Exception as e:
+            raise ValueError(e)
 
 
 class UserChangeForm(ModelForm):  # type: ignore
