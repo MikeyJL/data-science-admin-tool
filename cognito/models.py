@@ -1,10 +1,11 @@
 """Custom Cognito user model."""
 
 from typing import Any
+from uuid import uuid4
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models import BooleanField, EmailField
+from django.db.models import BooleanField, EmailField, UUIDField
 
 
 class CognitoUserManager(BaseUserManager[Any]):
@@ -53,6 +54,7 @@ class CognitoUserManager(BaseUserManager[Any]):
 class CognitoUser(AbstractBaseUser, PermissionsMixin):
     """The Cognito user entity."""
 
+    id = UUIDField(primary_key=True, default=uuid4, editable=False)
     email = EmailField(
         verbose_name="email address",
         max_length=255,
