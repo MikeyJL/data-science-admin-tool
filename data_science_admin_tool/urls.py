@@ -21,10 +21,12 @@ from django.urls.conf import re_path
 
 from .views import AppView
 
+API_VERSION = "api/v1"
+
 urlpatterns = [
-    re_path("api/v1/projects/?", include("projects.urls")),
+    re_path(f"{API_VERSION}/projects/?", include("projects.urls")),
+    re_path(f"{API_VERSION}/auth/?", include("rest_framework.urls")),
     re_path("^(?!api|admin).*", AppView.as_view()),
-    path("api-auth/", include("rest_framework.urls")),
     path("admin/", admin.site.urls),
     path("/", AppView.as_view()),
 ]
