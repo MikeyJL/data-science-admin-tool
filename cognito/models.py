@@ -3,6 +3,7 @@
 from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 from django.db.models import BooleanField, EmailField
 
 
@@ -49,7 +50,7 @@ class CognitoUserManager(BaseUserManager[Any]):
         return user
 
 
-class CognitoUser(AbstractBaseUser):
+class CognitoUser(AbstractBaseUser, PermissionsMixin):
     """The Cognito user entity."""
 
     email = EmailField(
@@ -84,7 +85,7 @@ class CognitoUser(AbstractBaseUser):
         Returns:
             bool: Whether the user has permission.
         """
-        return True
+        return self.is_admin
 
     def has_module_perms(self, app_label: str) -> bool:
         """Check if the user has module permissions.
@@ -92,7 +93,7 @@ class CognitoUser(AbstractBaseUser):
         Returns:
             bool: Whether the user has module permission.
         """
-        return True
+        return self.is_admin
 
     @property
     def is_staff(self) -> bool:
