@@ -1,7 +1,11 @@
+import { useMainContext } from "../../../pages/main.provider";
 import { NavLink } from "./NavLink";
 
 /** Main header with controls. */
 export const Header = () => {
+  // Provider
+  const { isLoggedIn } = useMainContext();
+
   return (
     <div className="py-8 container mx-auto flex justify-between items-end border-b-2 mb-8">
       <div>
@@ -10,9 +14,18 @@ export const Header = () => {
       </div>
 
       <div>
-        <NavLink label="Dashboard" to="/" />
-        <NavLink label="Profile" to="/profile" />
-        <a href="/admin">Admin</a>
+        {isLoggedIn ? (
+          <>
+            <NavLink label="Dashboard" to="/" />
+            <NavLink label="Profile" to="/profile" />
+            <a href="/admin">Admin</a>
+          </>
+        ) : (
+          <>
+            <NavLink label="Log in" to="/" />
+            <NavLink label="Sign up" to="/sign-up" />
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 """Views for Project app."""
 
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -13,6 +14,7 @@ from .serializers import ProjectSerializer
 class ProjectsView(APIView):
     """Project view."""
 
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
