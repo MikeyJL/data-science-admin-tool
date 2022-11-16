@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { axiosClient } from "../helpers";
 
 type MainContextType = {
   // Auth
@@ -16,7 +23,14 @@ type MainProviderProps = {
 };
 
 const MainProvider = ({ children }: MainProviderProps) => {
-  const [isLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  // Checks if the user is logged in
+  useEffect(() => {
+    axiosClient
+      .get("auth/login")
+      .then((res) => setIsLoggedIn(JSON.parse(res.data)));
+  }, []);
 
   const value = useMemo(
     () => ({

@@ -8,7 +8,7 @@ const HomePage = () => {
     ["projects"],
     ({ signal }) =>
       axiosClient
-        .get("projects/", {
+        .get("projects", {
           signal,
         })
         .then((res) => JSON.parse(res.data))

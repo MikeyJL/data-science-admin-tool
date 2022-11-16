@@ -25,7 +25,7 @@ API_VERSION = "api/v1"
 
 urlpatterns = [
     re_path(f"{API_VERSION}/projects/?", include("projects.urls")),
-    re_path(f"{API_VERSION}/auth/?", include("rest_framework.urls")),
+    re_path(f"{API_VERSION}/auth/?", include("cognito.urls")),
     re_path("^(?!api|admin).*", AppView.as_view()),
     path("admin/", admin.site.urls),
 ]

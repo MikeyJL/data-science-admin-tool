@@ -13,9 +13,9 @@ const MainNavigator = () => {
 
   return (
     <BrowserRouter>
-      <Header />
+      <main className="container mx-auto px-5">
+        <Header />
 
-      <main className="container mx-auto">
         <Routes>
           {isLoggedIn ? (
             <>
