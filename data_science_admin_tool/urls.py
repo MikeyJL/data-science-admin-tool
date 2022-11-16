@@ -28,5 +28,4 @@ urlpatterns = [
     re_path(f"{API_VERSION}/auth/?", include("rest_framework.urls")),
     re_path("^(?!api|admin).*", AppView.as_view()),
     path("admin/", admin.site.urls),
-    path("/", AppView.as_view()),
 ]
