@@ -160,3 +160,16 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Custom admin theme
+
+JAZZMIN_SETTINGS = {
+    "site_title": "DSAT Admin",
+    "welcome_sign": "Welcome to DSAT Admin",
+    "topmenu_links": [
+        {
+            "name": "Visit App",
+            "url": "http://localhost:8000",
+        },
+    ],
+}
