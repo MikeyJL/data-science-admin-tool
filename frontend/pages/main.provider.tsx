@@ -1,5 +1,7 @@
 import React, {
   createContext,
+  Dispatch,
+  SetStateAction,
   useContext,
   useEffect,
   useMemo,
@@ -10,11 +12,13 @@ import { axiosClient } from "../helpers";
 type MainContextType = {
   // Auth
   isLoggedIn: boolean;
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 };
 
 /* eslint-disable */
 export const MainContext = createContext<MainContextType>({
   isLoggedIn: false,
+  setIsLoggedIn: () => {},
 });
 /* eslint-enable */
 
@@ -35,6 +39,7 @@ const MainProvider = ({ children }: MainProviderProps) => {
   const value = useMemo(
     () => ({
       isLoggedIn,
+      setIsLoggedIn,
     }),
     // eslint-disable-next-line
     [isLoggedIn]

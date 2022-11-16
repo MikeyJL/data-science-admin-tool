@@ -1,9 +1,10 @@
 """Views for Cognito app."""
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
+from rest_framework.parsers import JSONParser
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
 from cognito.serializers import CognitoSerializer
@@ -11,6 +12,8 @@ from cognito.serializers import CognitoSerializer
 
 class LoginView(APIView):
     """Login view."""
+
+    parser_classes = [JSONParser]
 
     def get(self, request: Request) -> Response:
         """Get the authenticated state of the user.
@@ -35,5 +38,9 @@ class LoginView(APIView):
         username = request.data["username"]
         password = request.data["password"]
         user = authenticate(username=username, password=password)
-        serializer = CognitoSerializer(user, many=False)
-        return Response(serializer.data, status=HTTP_200_OK)
+        if user is not None:
+            login(request, user)
+            serializer = CognitoSerializer(user, many=False)
+            return Response(serializer.data, status=HTTP_200_OK)
+        else:
+            return Response("Error", status=HTTP_400_BAD_REQUEST)

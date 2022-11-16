@@ -1,3 +1,4 @@
+import { InputHTMLAttributes } from "react";
 import { RegisterOptions, UseFormReturn } from "react-hook-form";
 import { Txt } from "./Txt";
 
@@ -12,10 +13,10 @@ type InputProps = {
   form: UseFormReturn<any, any>;
   /** Input validation schema. */
   validation?: ValidationMap;
-};
+} & Omit<InputHTMLAttributes<HTMLInputElement>, "form">;
 
 /** Generic styled input element. */
-export const Input = ({ name, form, validation }: InputProps) => {
+export const Input = ({ name, form, validation, ...props }: InputProps) => {
   const errorMessage = form.formState.errors[name]?.message;
 
   return (
@@ -23,6 +24,7 @@ export const Input = ({ name, form, validation }: InputProps) => {
       <input
         className="border-2 rounded-lg bg-transparent w-full px-4 py-2"
         {...form.register(name, validation && validation[name])}
+        {...props}
       />
       {errorMessage && (
         <Txt className="text-red-700">{errorMessage.toString()}</Txt>
