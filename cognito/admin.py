@@ -71,7 +71,7 @@ class UserChangeForm(ModelForm):  # type: ignore
         """Metadata about relating user and fields."""
 
         model = CognitoUser
-        fields = ("email", "password", "is_active", "is_admin")
+        fields = "__all__"
 
 
 class UserAdmin(BaseUserAdmin):
@@ -80,11 +80,11 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
 
-    list_display = ("email", "is_admin")
+    list_display = ("email", "is_admin", "is_active", "last_login")
     list_filter = ("is_admin",)
     fieldsets = (
         (None, {"fields": ("email",)}),
-        ("Permissions", {"fields": ("is_admin",)}),
+        ("Access", {"fields": ("is_admin", "is_active")}),
     )
     add_fieldsets = (
         (
