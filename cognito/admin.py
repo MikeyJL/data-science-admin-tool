@@ -47,17 +47,19 @@ class UserCreationForm(ModelForm):  # type: ignore
         email = self.cleaned_data["email"]
         password = self.cleaned_data["password"]
 
-        user = CognitoUser()
+        user = super().save(commit=False)
         user.set_password(password)
 
         try:
             u = Cognito(**COGNITO_CONFIG)
             u.set_base_attributes(email=email)
             u.register(email, password)
-            user.save()
-            return user
         except Exception as e:
             raise ValueError(e)
+
+        if commit:
+            user.save()
+        return user
 
 
 class UserChangeForm(ModelForm):  # type: ignore
