@@ -1,6 +1,6 @@
 """Views for Cognito app."""
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework.parsers import JSONParser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -44,3 +44,20 @@ class LoginView(APIView):
             return Response(serializer.data, status=HTTP_200_OK)
         else:
             return Response("Error", status=HTTP_400_BAD_REQUEST)
+
+
+class LogoutView(APIView):
+    """Logout view."""
+
+    def get(self, request: Request) -> Response:
+        """Log out the current user.
+
+        Args:
+            request (Request): the request received.
+
+        Returns:
+            Response: a success message.
+        """
+        logout(request)
+
+        return Response("Success", status=HTTP_200_OK)

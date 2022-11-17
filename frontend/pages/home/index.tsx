@@ -4,6 +4,7 @@ import { axiosClient } from "../../helpers";
 import { Project } from "../../types";
 
 const HomePage = () => {
+  // Query
   const { data, isLoading } = useQuery<Project[] | undefined>(
     ["projects"],
     ({ signal }) =>

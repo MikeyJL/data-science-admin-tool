@@ -48,7 +48,7 @@ const LoginPage = () => {
         Log in
       </Txt>
 
-      <div className="grid gap-4 w-1/3">
+      <form className="grid gap-4 w-1/3" onSubmit={handleSubmit(handleLogin)}>
         <Input
           name="email"
           type="email"
@@ -63,8 +63,8 @@ const LoginPage = () => {
           form={form}
           validation={validation}
         />
-        <PrimaryButton label="Log in" onClick={handleSubmit(handleLogin)} />
-      </div>
+        <PrimaryButton type="submit">Log in</PrimaryButton>
+      </form>
     </>
   );
 };

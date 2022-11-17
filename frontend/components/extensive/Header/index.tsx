@@ -21,10 +21,7 @@ export const Header = () => {
             <a href="/admin">Admin</a>
           </>
         ) : (
-          <>
-            <NavLink label="Log in" to="/" />
-            <NavLink label="Sign up" to="/sign-up" />
-          </>
+          <NavLink label="Log in" to="/" />
         )}
       </div>
     </div>

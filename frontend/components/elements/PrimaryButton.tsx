@@ -1,19 +1,19 @@
 import classNames from "classnames";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
 type PrimaryButtonProps = {
-  label: string;
-  onClick: () => void;
+  children: ReactNode;
   // Styling
-  className?: string;
   fullWidth?: boolean;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 /** Primary styled button. */
 export const PrimaryButton = ({
-  label,
+  children,
   onClick,
   className = "",
   fullWidth,
+  ...props
 }: PrimaryButtonProps) => {
   return (
     <button
@@ -25,8 +25,9 @@ export const PrimaryButton = ({
         },
         className
       )}
+      {...props}
     >
-      {label}
+      {children}
     </button>
   );
 };

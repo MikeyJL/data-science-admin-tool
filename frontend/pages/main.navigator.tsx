@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Header } from "../components/extensive";
 import LoginPage from "./auth/login";
-import SignUpPage from "./auth/sign-up";
 import HomePage from "./home";
 import { useMainContext } from "./main.provider";
 import NotFoundPage from "./not-found";
@@ -25,7 +24,6 @@ const MainNavigator = () => {
           ) : (
             <>
               <Route index element={<LoginPage />} />
-              <Route path="sign-up" element={<SignUpPage />} />
             </>
           )}
           <Route path="*" element={<NotFoundPage />} />
