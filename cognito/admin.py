@@ -91,7 +91,7 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email",),
+                "fields": ("email", "password", "password_confirmed"),
             },
         ),
     )
