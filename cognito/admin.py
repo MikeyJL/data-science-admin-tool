@@ -4,7 +4,6 @@ from typing import Any
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.forms import CharField, ModelForm, PasswordInput
@@ -63,8 +62,6 @@ class UserCreationForm(ModelForm):  # type: ignore
 class UserChangeForm(ModelForm):  # type: ignore
     """Form layout for updating a user."""
 
-    password = ReadOnlyPasswordHashField()
-
     class Meta:
         """Metadata about relating user and fields."""
 
@@ -78,6 +75,7 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
 
+    readonly_fields = ("email",)
     list_display = ("email", "is_admin", "is_active", "last_login")
     list_filter = ("is_admin",)
     fieldsets = (
