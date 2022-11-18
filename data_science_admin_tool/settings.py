@@ -176,7 +176,7 @@ JAZZMIN_SETTINGS = {
     "topmenu_links": [
         {
             "name": "Visit App",
-            "url": "http://localhost:8000",
+            "url": os.environ["APP_URL"],
         },
     ],
 }

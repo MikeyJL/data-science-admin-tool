@@ -2,7 +2,6 @@
 
 from typing import Any
 
-import boto3
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -10,13 +9,10 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.forms import CharField, ModelForm, PasswordInput
 from django.http.request import HttpRequest
-from pycognito import Cognito
 
-from data_science_admin_tool.settings import COGNITO_CONFIG
+from cognito.service import CognitoService
 
 from .models import CognitoUser
-
-cognitoClient = boto3.client("cognito-idp")
 
 
 class UserCreationForm(ModelForm):  # type: ignore
@@ -55,9 +51,7 @@ class UserCreationForm(ModelForm):  # type: ignore
         user.set_password(password)
 
         try:
-            u = Cognito(**COGNITO_CONFIG)
-            u.set_base_attributes(email=email)
-            u.register(email, password)
+            CognitoService().create_user(email, password)
         except Exception as e:
             raise ValueError(e)
 
@@ -110,9 +104,8 @@ class UserAdmin(BaseUserAdmin):
             request (HttpRequest): the request object.
             obj (CognitoUser): the user model to delete.
         """
-        cognitoClient.admin_delete_user(
-            UserPoolId=COGNITO_CONFIG["user_pool_id"], Username=obj.get_username()
-        )
+        CognitoService().delete_user(obj.get_username())
+
         obj.delete()
 
 

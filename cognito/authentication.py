@@ -1,21 +1,18 @@
 """Cognito authentication backend."""
 
 from typing import Any, Optional
+from uuid import UUID
 
 from django.contrib.auth.backends import BaseBackend
 from django.http.request import HttpRequest
-from pycognito import Cognito
 
 from cognito.models import CognitoUser
-from data_science_admin_tool.settings import COGNITO_CONFIG
+
+from .service import CognitoService
 
 
 class CognitoBackend(BaseBackend):
     """Custom backend for AWS Cognito."""
-
-    id_token: str | None = None
-    access_token: str | None = None
-    refresh_token: str | None = None
 
     def authenticate(  # type: ignore
         self,
@@ -31,19 +28,13 @@ class CognitoBackend(BaseBackend):
             password: the password of the user.
         """
         try:
-            user = Cognito(**COGNITO_CONFIG, username=username)
-            user.authenticate(
-                password,
-            )
-            self.id_token = user.id_token
-            self.access_token = user.access_token
-            self.refresh_token = user.refresh_token
+            CognitoService().authenticate(username, password)
 
             return CognitoUser.objects.get(email=username)
         except Exception:
             return None
 
-    def get_user(self, user_id: int) -> Any:
+    def get_user(self, user_id: UUID | str) -> Any:  # type: ignore
         """Get the currently signed-in user.
 
         Args:
