@@ -2,17 +2,21 @@
 
 from typing import Any
 
+import boto3
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.forms import CharField, ModelForm, PasswordInput
+from django.http.request import HttpRequest
 from pycognito import Cognito
 
 from data_science_admin_tool.settings import COGNITO_CONFIG
 
 from .models import CognitoUser
+
+cognitoClient = boto3.client("cognito-idp")
 
 
 class UserCreationForm(ModelForm):  # type: ignore
@@ -98,6 +102,18 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ("email",)
     ordering = ("email",)
     filter_horizontal = ()
+
+    def delete_model(self, request: HttpRequest, obj: CognitoUser) -> None:
+        """Delete the user from Cognito and from DB.
+
+        Args:
+            request (HttpRequest): the request object.
+            obj (CognitoUser): the user model to delete.
+        """
+        cognitoClient.admin_delete_user(
+            UserPoolId=COGNITO_CONFIG["user_pool_id"], Username=obj.get_username()
+        )
+        obj.delete()
 
 
 admin.site.register(CognitoUser, UserAdmin)
