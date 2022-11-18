@@ -19,12 +19,13 @@ class UserCreationForm(ModelForm):  # type: ignore
 
     password = CharField(label="Password", widget=PasswordInput)
     password_confirmed = CharField(label="Confirm Password", widget=PasswordInput)
+    bio = CharField(max_length=255, required=False)
 
     class Meta:
         """Metadata about relating user and fields."""
 
         user = CognitoUser
-        fields = ("email", "id")
+        fields = "__all__"
 
     def clean(self) -> None:
         """Check if the password matches."""
@@ -62,6 +63,8 @@ class UserCreationForm(ModelForm):  # type: ignore
 class UserChangeForm(ModelForm):  # type: ignore
     """Form layout for updating a user."""
 
+    bio = CharField(max_length=255, required=False)
+
     class Meta:
         """Metadata about relating user and fields."""
 
@@ -75,11 +78,10 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
 
-    readonly_fields = ("email",)
     list_display = ("email", "is_admin", "is_active", "last_login")
     list_filter = ("is_admin",)
     fieldsets = (
-        (None, {"fields": ("email",)}),
+        (None, {"fields": ("email", "bio")}),
         ("Access", {"fields": ("is_admin", "is_active")}),
     )
     add_fieldsets = (
@@ -87,7 +89,7 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "password", "password_confirmed"),
+                "fields": ("email", "password", "password_confirmed", "bio"),
             },
         ),
     )

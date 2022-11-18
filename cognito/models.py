@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models import BooleanField, EmailField, UUIDField
+from django.db.models import BooleanField, CharField, EmailField, UUIDField
 
 
 class CognitoUserManager(BaseUserManager[Any]):
@@ -63,6 +63,7 @@ class CognitoUser(AbstractBaseUser, PermissionsMixin):
     password = None  # type: ignore
     is_active = BooleanField(default=True)
     is_admin = BooleanField(default=False)
+    bio = CharField(verbose_name="bio", max_length=255, null=True)
 
     objects = CognitoUserManager()
 
