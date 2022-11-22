@@ -1,7 +1,9 @@
 """Service to interact with AWS Congnito."""
 
 import boto3
+from django.core.cache import cache
 from pycognito import Cognito
+from rest_framework.request import Request
 
 from data_science_admin_tool.settings import COGNITO_CONFIG
 
@@ -22,6 +24,28 @@ class CognitoService:
         u.authenticate(
             password,
         )
+
+        try:
+            cache.set(f"access_token_{u.username}", u.access_token, None)
+            cache.set(f"refresh_token_{u.username}", u.refresh_token, None)
+        except Exception as e:
+            # TODO: Replace with logger
+            print(e)
+
+    def logout(self, request: Request) -> None:
+        """Log out the current user.
+
+        Args:
+            request (Request): the request to logout.
+        """
+        access_key = f"access_token_{request.user.get_username()}"
+        refresh_key = f"refresh_token_{request.user.get_username()}"
+        access_token = cache.get(access_key)
+
+        Cognito(**COGNITO_CONFIG, access_token=access_token).logout()
+
+        cache.delete(access_key)
+        cache.delete(refresh_key)
 
     def create_user(self, email: str, password: str) -> None:
         """Create a new user on DB and Cognito.

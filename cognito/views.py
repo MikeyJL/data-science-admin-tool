@@ -8,6 +8,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
 from cognito.serializers import CognitoSerializer
+from cognito.service import CognitoService
 
 
 class LoginView(APIView):
@@ -58,6 +59,8 @@ class LogoutView(APIView):
         Returns:
             Response: a success message.
         """
+        CognitoService().logout(request)
+
         logout(request)
 
         return Response("Success", status=HTTP_200_OK)
