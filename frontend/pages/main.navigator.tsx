@@ -5,6 +5,7 @@ import HomePage from "./home";
 import { useMainContext } from "./main.provider";
 import NotFoundPage from "./not-found";
 import ProfilePage from "./profile";
+import ProjectPage from "./project";
 
 const MainNavigator = () => {
   // Provider
@@ -20,6 +21,9 @@ const MainNavigator = () => {
             <>
               <Route index element={<HomePage />} />
               <Route path="profile" element={<ProfilePage />} />
+              <Route path="projects">
+                <Route path=":id" element={<ProjectPage />} />
+              </Route>
             </>
           ) : (
             <>

@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Txt } from "../../components/elements";
 import { axiosClient } from "../../helpers";
 import { Project } from "../../types";
+import { ProjectCard } from "./components";
 
 const HomePage = () => {
   // Query
@@ -18,24 +19,17 @@ const HomePage = () => {
   return (
     <>
       {/* Heading */}
-      <Txt type="title" className="mb-4">
-        Dashboard
+      <Txt type="subtitle" className="mb-4">
+        Projects
       </Txt>
 
       {/* Projects */}
       {isLoading || !data || data.length === 0 ? (
         <p>Loading...</p>
       ) : (
-        <div className="p-5 bg-gray-100 rounded-xl">
-          <Txt type="subtitle" className="mb-4">
-            Projects
-          </Txt>
-
-          {data.map(({ id, name, description }) => (
-            <div key={id} className="flex">
-              <Txt className="mr-4">{name}</Txt>
-              <Txt>{description}</Txt>
-            </div>
+        <div className="grid grid-cols-3 gap-8">
+          {data.map((project) => (
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       )}
