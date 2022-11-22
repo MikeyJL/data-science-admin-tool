@@ -21,7 +21,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <div className="bg-gray-100 rounded-xl p-5 grid gap-4 hover:scale-105 transition-transform duration-300 ease-out">
       <Txt className="font-semibold">{name}</Txt>
-      <Txt>{description}</Txt>
+      <Txt className="line-clamp-3">{description}</Txt>
 
       <PrimaryButton onClick={handleNavigate}>View Details</PrimaryButton>
     </div>
