@@ -64,3 +64,19 @@ class LogoutView(APIView):
         logout(request)
 
         return Response("Success", status=HTTP_200_OK)
+
+
+class UserView(APIView):
+    """User view."""
+
+    def get(self, request: Request) -> Response:
+        """Get the details of the currently logged in user.
+
+        Args:
+            request (Request): the request.
+
+        Returns:
+            Response: the current user details.
+        """
+        serializer = CognitoSerializer(request.user)
+        return Response(serializer.data, status=HTTP_200_OK)
