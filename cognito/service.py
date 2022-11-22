@@ -38,14 +38,16 @@ class CognitoService:
         Args:
             request (Request): the request to logout.
         """
-        access_key = f"access_token_{request.user.get_username()}"
-        refresh_key = f"refresh_token_{request.user.get_username()}"
-        access_token = cache.get(access_key)
+        try:
+            access_key = f"access_token_{request.user.get_username()}"
+            refresh_key = f"refresh_token_{request.user.get_username()}"
+            access_token = cache.get(access_key)
+            Cognito(**COGNITO_CONFIG, access_token=access_token).logout()
 
-        Cognito(**COGNITO_CONFIG, access_token=access_token).logout()
-
-        cache.delete(access_key)
-        cache.delete(refresh_key)
+            cache.delete(access_key)
+            cache.delete(refresh_key)
+        except Exception as e:
+            print(e)
 
     def create_user(self, email: str, password: str) -> None:
         """Create a new user on DB and Cognito.

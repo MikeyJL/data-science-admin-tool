@@ -1,10 +1,12 @@
 """Views for Cognito app."""
 
 from django.contrib.auth import authenticate, login, logout
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 
 from cognito.serializers import CognitoSerializer
@@ -13,6 +15,9 @@ from cognito.service import CognitoService
 
 class LoginView(APIView):
     """Login view."""
+
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = ()
 
     parser_classes = [JSONParser]
 
@@ -50,6 +55,9 @@ class LoginView(APIView):
 class LogoutView(APIView):
     """Logout view."""
 
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request: Request) -> Response:
         """Log out the current user.
 
@@ -69,6 +77,9 @@ class LogoutView(APIView):
 class UserView(APIView):
     """User view."""
 
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request: Request) -> Response:
         """Get the details of the currently logged in user.
 
@@ -78,5 +89,8 @@ class UserView(APIView):
         Returns:
             Response: the current user details.
         """
-        serializer = CognitoSerializer(request.user)
-        return Response(serializer.data, status=HTTP_200_OK)
+        try:
+            serializer = CognitoSerializer(request.user)
+            return Response(serializer.data, status=HTTP_200_OK)
+        except Exception:
+            return Response(None, status=HTTP_404_NOT_FOUND)

@@ -14,8 +14,8 @@ from .serializers import ProjectSerializer
 class ProjectsView(APIView):
     """Project view."""
 
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request) -> Response:
         """Get all the projects.

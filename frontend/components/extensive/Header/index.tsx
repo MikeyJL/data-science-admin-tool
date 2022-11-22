@@ -4,7 +4,7 @@ import { NavLink } from "./NavLink";
 /** Main header with controls. */
 export const Header = () => {
   // Provider
-  const { isLoggedIn } = useMainContext();
+  const { isLoggedIn, user } = useMainContext();
 
   return (
     <div className="py-8 container mx-auto flex justify-between items-end border-b-2 mb-8">
@@ -18,7 +18,7 @@ export const Header = () => {
           <>
             <NavLink label="Dashboard" to="/" />
             <NavLink label="Profile" to="/profile" />
-            <a href="/admin">Admin</a>
+            {user?.is_admin && <a href="/admin">Admin</a>}
           </>
         ) : (
           <NavLink label="Log in" to="/" />
