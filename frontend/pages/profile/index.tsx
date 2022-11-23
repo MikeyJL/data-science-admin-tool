@@ -1,7 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { PrimaryButton, Txt } from "../../components/elements";
+import { LoadingWrapper } from "../../components/generic";
 import { axiosClient } from "../../helpers";
+import { User } from "../../types";
 import { useMainContext } from "../main.provider";
 
 const ProfilePage = () => {
@@ -10,6 +12,17 @@ const ProfilePage = () => {
 
   // Router
   const navigate = useNavigate();
+
+  // Query
+  const { data, isLoading } = useQuery<User>(["user"], ({ signal }) =>
+    axiosClient
+      .get("auth/user", {
+        signal,
+      })
+      .then((res) => JSON.parse(res.data))
+  );
+
+  console.log(data);
 
   // Mutation
   const { mutate } = useMutation(
@@ -33,7 +46,50 @@ const ProfilePage = () => {
         Profile
       </Txt>
 
-      <PrimaryButton onClick={handleLogout}>Log out</PrimaryButton>
+      <LoadingWrapper isLoading={isLoading}>
+        {data && (
+          <div className="grid grid-cols-2">
+            {/* General */}
+            <div>
+              <Txt>
+                <b>Email:</b> {data.email}
+              </Txt>
+              <Txt>
+                <b>Last Login:</b> {new Date(data.last_login).toLocaleString()}
+              </Txt>
+            </div>
+
+            {/* Access */}
+            <div>
+              {/* Email verified */}
+              <Txt className="font-bold">
+                Email verified:{" "}
+                <span
+                  className={
+                    data.email_verified ? "text-green-500" : "text-red-500"
+                  }
+                >
+                  {data.email_verified ? "YES" : "NO"}
+                </span>
+              </Txt>
+
+              {/* Is admin */}
+              <Txt className="font-bold">
+                Admin:{" "}
+                <span
+                  className={data.is_admin ? "text-green-500" : "text-red-500"}
+                >
+                  {data.is_admin ? "YES" : "NO"}
+                </span>
+              </Txt>
+            </div>
+          </div>
+        )}
+      </LoadingWrapper>
+
+      <PrimaryButton onClick={handleLogout} className="mt-8">
+        Log out
+      </PrimaryButton>
     </>
   );
 };

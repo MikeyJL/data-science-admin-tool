@@ -14,4 +14,11 @@ class CognitoSerializer(ModelSerializer[Any]):
         """Config for serialization."""
 
         model = CognitoUser
-        fields = ("id", "email", "is_admin", "is_active")
+        fields = (
+            "id",
+            "email",
+            "email_verified",
+            "is_admin",
+            "is_active",
+            "last_login",
+        )

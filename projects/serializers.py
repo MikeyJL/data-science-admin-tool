@@ -14,4 +14,4 @@ class ProjectSerializer(ModelSerializer[Any]):
         """Config for serialization."""
 
         model = Project
-        fields = ("id", "name", "description")
+        fields = "__all__"
