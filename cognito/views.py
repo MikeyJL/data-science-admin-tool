@@ -8,20 +8,21 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
 
 from cognito.serializers import CognitoSerializer
 from cognito.service import CognitoService
 
 
-class LoginView(APIView):
-    """Login view."""
+class AuthView(ViewSet):
+    """Authentication view."""
 
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = ()
 
     parser_classes = [JSONParser]
 
-    def get(self, request: Request) -> Response:
+    def check_auth(self, request: Request) -> Response:
         """Get the authenticated state of the user.
 
         Args:
@@ -32,7 +33,7 @@ class LoginView(APIView):
         """
         return Response(request.user.is_authenticated, status=HTTP_200_OK)
 
-    def post(self, request: Request) -> Response:
+    def login(self, request: Request) -> Response:
         """Log in the user.
 
         Args:
@@ -51,14 +52,7 @@ class LoginView(APIView):
         else:
             return Response("Error", status=HTTP_400_BAD_REQUEST)
 
-
-class LogoutView(APIView):
-    """Logout view."""
-
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request: Request) -> Response:
+    def logout(self, request: Request) -> Response:
         """Log out the current user.
 
         Args:
