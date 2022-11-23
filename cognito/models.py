@@ -60,7 +60,7 @@ class CognitoUser(AbstractBaseUser, PermissionsMixin):
         max_length=255,
         unique=True,
     )
-    password = None  # type: ignore
+    email_verified = BooleanField(default=False)
     is_active = BooleanField(default=True)
     is_admin = BooleanField(default=False)
     bio = CharField(verbose_name="bio", max_length=255, null=True)
