@@ -105,7 +105,13 @@ class UserAdmin(BaseUserAdmin):
             request (HttpRequest): the request object.
             obj (CognitoUser): the user model to delete.
         """
-        CognitoService().delete_user(obj.get_username())
+        current_username = request.user.get_username()
+        to_delete_username = obj.get_username()
+
+        if current_username == to_delete_username:
+            return None
+
+        CognitoService().delete_user(to_delete_username)
 
         obj.delete()
 
