@@ -50,7 +50,7 @@ const ConfirmPage = () => {
       }),
     {
       onSuccess: () => {
-        navigate("/login");
+        navigate("/");
       },
     }
   );

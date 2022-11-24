@@ -66,6 +66,13 @@ class CognitoService:
         try:
             u = Cognito(**COGNITO_CONFIG)
             u.confirm_sign_up(code, username=username)
+            cognitoClient.admin_update_user_attributes(
+                UserPoolId=COGNITO_CONFIG["user_pool_id"],
+                Username=username,
+                UserAttributes=[
+                    {"Name": "email_verified", "Value": "true"},
+                ],
+            )
         except Exception as e:
             print(e)
 
