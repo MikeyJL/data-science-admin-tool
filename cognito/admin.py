@@ -78,9 +78,10 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
 
+    actions = None
     readonly_fields = ("email_verified",)
     list_display = ("email", "email_verified", "is_admin", "is_active", "last_login")
-    list_filter = ("is_admin",)
+    list_filter = ()
     fieldsets = (
         (None, {"fields": ("email", "bio", "email_verified")}),
         ("Access", {"fields": ("is_admin", "is_active")}),
@@ -96,7 +97,6 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = ("email",)
     ordering = ("email",)
-    filter_horizontal = ()
 
     def delete_model(self, request: HttpRequest, obj: CognitoUser) -> None:
         """Delete the user from Cognito and from DB.
