@@ -1,6 +1,6 @@
-import { Axios } from "axios";
+import axios from "axios";
 
-export const axiosClient = new Axios({
+export const axiosClient = axios.create({
   baseURL: process.env.API_URL,
   headers: {
     "Content-Type": "application/json",

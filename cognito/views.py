@@ -2,6 +2,7 @@
 
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -44,13 +45,18 @@ class AuthView(ViewSet):
         """
         username = request.data["username"]
         password = request.data["password"]
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            serializer = CognitoSerializer(user, many=False)
-            return Response(serializer.data, status=HTTP_200_OK)
-        else:
-            return Response("Error", status=HTTP_400_BAD_REQUEST)
+        try:
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                serializer = CognitoSerializer(user, many=False)
+                return Response(serializer.data, status=HTTP_200_OK)
+            else:
+                return Response("Error", status=HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            if e.__class__.__name__ == "UserNotConfirmedException":
+                raise PermissionDenied("Need verification")
+            raise NotFound("Cannot find user")
 
     def logout(self, request: Request) -> Response:
         """Log out the current user.
@@ -86,5 +92,43 @@ class UserView(APIView):
         try:
             serializer = CognitoSerializer(request.user)
             return Response(serializer.data, status=HTTP_200_OK)
+        except Exception:
+            return Response(None, status=HTTP_404_NOT_FOUND)
+
+
+class EmailVerification(APIView):
+    """Email verification view."""
+
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request: Request) -> Response:
+        """Send a verification code to the user.
+
+        Args:
+            request (Request): the request.
+
+        Returns:
+            Response: the response.
+        """
+        try:
+            CognitoService().send_verification(request)
+            return Response("OK", status=HTTP_200_OK)
+        except Exception:
+            return Response(None, status=HTTP_404_NOT_FOUND)
+
+    def post(self, request: Request) -> Response:
+        """Confirm a user with verification code.
+
+        Args:
+            request (Request): the request.
+
+        Returns:
+            Response: the response.
+        """
+        code = request.data["code"]
+        try:
+            CognitoService().confirm_verification(request, code)
+            return Response("OK", status=HTTP_200_OK)
         except Exception:
             return Response(None, status=HTTP_404_NOT_FOUND)

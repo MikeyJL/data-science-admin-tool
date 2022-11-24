@@ -27,12 +27,9 @@ class CognitoBackend(BaseBackend):
             username: the username of the user.
             password: the password of the user.
         """
-        try:
-            CognitoService().authenticate(username, password)
+        CognitoService().authenticate(username, password)
 
-            return CognitoUser.objects.get(email=username)
-        except Exception:
-            return None
+        return CognitoUser.objects.get(email=username)
 
     def get_user(self, user_id: UUID | str) -> Any:  # type: ignore
         """Get the currently signed-in user.

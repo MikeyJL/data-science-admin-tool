@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.urls.conf import re_path
+from django.views.generic import RedirectView
 
 from .views import AppView
 
@@ -27,5 +28,9 @@ urlpatterns = [
     re_path(f"{API_VERSION}/projects/?", include("projects.urls")),
     re_path(f"{API_VERSION}/auth/?", include("cognito.urls")),
     re_path("^(?!api|admin).*", AppView.as_view()),
+    re_path(
+        "admin/login/?",
+        RedirectView.as_view(url="/", permanent=False),
+    ),
     path("admin/", admin.site.urls),
 ]

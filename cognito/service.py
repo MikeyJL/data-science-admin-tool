@@ -13,6 +13,21 @@ cognitoClient = boto3.client("cognito-idp")
 class CognitoService:
     """AWS Cognito service."""
 
+    def __get_cache_token_keys(self, request: Request) -> tuple[str, str, str]:
+        """Get the name keys of the cached tokens.
+
+        Args:
+            request (Request): the request.
+
+        Returns:
+            tuple[str, str, str]: the id, access, and refresh tokens — respectively.
+        """
+        id_key = f"id_token_{request.user.get_username()}"
+        access_key = f"access_token_{request.user.get_username()}"
+        refresh_key = f"refresh_token_{request.user.get_username()}"
+
+        return (id_key, access_key, refresh_key)
+
     def authenticate(self, username: str, password: str) -> None:
         """Authenticate a user.
 
@@ -25,11 +40,46 @@ class CognitoService:
             password,
         )
 
+        cache.set(f"id_token_{u.username}", u.id_token, None)
+        cache.set(f"access_token_{u.username}", u.access_token, None)
+        cache.set(f"refresh_token_{u.username}", u.refresh_token, None)
+
+    def send_verification(self, request: Request) -> None:
+        """Send a verification code to user.
+
+        Args:
+            request (Request): the request.
+        """
         try:
-            cache.set(f"access_token_{u.username}", u.access_token, None)
-            cache.set(f"refresh_token_{u.username}", u.refresh_token, None)
+            id_key, access_key, refresh_key = self.__get_cache_token_keys(request)
+
+            id_token = cache.get(id_key)
+            access_token = cache.get(access_key)
+            refresh_token = cache.get(refresh_key)
+
+            u = Cognito(
+                **COGNITO_CONFIG,
+                id_token=id_token,
+                access_token=access_token,
+                refresh_token=refresh_token,
+            )
+            u.send_verification()
         except Exception as e:
-            # TODO: Replace with logger
+            print(e)
+
+    def confirm_verification(self, request: Request, code: str) -> None:
+        """confirm_verification.
+
+        Args:
+            request (Request): request
+            code (str): code
+        """
+        try:
+            u = Cognito(
+                **COGNITO_CONFIG,
+            )
+            u.confirm_sign_up(code, username=request.user.get_username())
+        except Exception as e:
             print(e)
 
     def logout(self, request: Request) -> None:
@@ -39,11 +89,11 @@ class CognitoService:
             request (Request): the request to logout.
         """
         try:
-            access_key = f"access_token_{request.user.get_username()}"
-            refresh_key = f"refresh_token_{request.user.get_username()}"
+            id_key, access_key, refresh_key = self.__get_cache_token_keys(request)
             access_token = cache.get(access_key)
             Cognito(**COGNITO_CONFIG, access_token=access_token).logout()
 
+            cache.delete(id_key)
             cache.delete(access_key)
             cache.delete(refresh_key)
         except Exception as e:

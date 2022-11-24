@@ -18,7 +18,7 @@ const ProjectPage = () => {
         .get(`projects/${id}`, {
           signal,
         })
-        .then((res) => JSON.parse(res.data))
+        .then((res) => res.data)
   );
 
   useEffect(() => {

@@ -13,14 +13,22 @@ type InputProps = {
   form: UseFormReturn<any, any>;
   /** Input validation schema. */
   validation?: ValidationMap;
+  /** Styles for the input container. */
+  className?: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "form">;
 
 /** Generic styled input element. */
-export const Input = ({ name, form, validation, ...props }: InputProps) => {
+export const Input = ({
+  name,
+  form,
+  validation,
+  className,
+  ...props
+}: InputProps) => {
   const errorMessage = form.formState.errors[name]?.message;
 
   return (
-    <div>
+    <div className={className}>
       <input
         className="border-2 rounded-lg bg-transparent w-full px-4 py-2"
         {...form.register(name, validation && validation[name])}

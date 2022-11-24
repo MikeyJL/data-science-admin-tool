@@ -1,4 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 import { Input, PrimaryButton, Txt } from "../../../components/elements";
 import { axiosClient } from "../../../helpers";
 import { useMainContext } from "../../main.provider";
@@ -7,6 +9,9 @@ import useLoginForm, { LoginFormData } from "./hooks/use-login-form";
 const LoginPage = () => {
   // Provider
   const { setIsLoggedIn } = useMainContext();
+
+  // Router
+  const navigate = useNavigate();
 
   // Form
   const { form, validation } = useLoginForm();
@@ -29,6 +34,17 @@ const LoginPage = () => {
     {
       onSuccess: () => {
         setIsLoggedIn(true);
+      },
+      onError: (e) => {
+        const error = e as AxiosError<{ detail: string }>;
+
+        // Navigates to confirm sign-up
+        if (
+          error.response?.status === 403 &&
+          error.response?.data.detail === "Need verification"
+        ) {
+          navigate("/404");
+        }
       },
     }
   );

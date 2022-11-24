@@ -13,7 +13,7 @@ const HomePage = () => {
         .get("projects", {
           signal,
         })
-        .then((res) => JSON.parse(res.data))
+        .then((res) => res.data)
   );
 
   return (

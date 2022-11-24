@@ -38,12 +38,10 @@ const MainProvider = ({ children }: MainProviderProps) => {
 
   // Checks if the user is logged in
   useEffect(() => {
-    axiosClient
-      .get("auth/login")
-      .then((res) => setIsLoggedIn(JSON.parse(res.data)));
+    axiosClient.get("auth/login").then((res) => setIsLoggedIn(res.data));
 
     if (isLoggedIn) {
-      axiosClient.get("auth/user").then((res) => setUser(JSON.parse(res.data)));
+      axiosClient.get("auth/user").then((res) => setUser(res.data));
     }
   }, [isLoggedIn]);
 
