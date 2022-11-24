@@ -43,11 +43,7 @@ const ConfirmPage = () => {
     { username: string; code: string }
   >(
     async (data) =>
-      await axiosClient.post("/auth/verify-email", JSON.stringify(data), {
-        headers: {
-          "X-CSRFTOKEN": document.cookie.match(/csrftoken=(.*)/)?.[1],
-        },
-      }),
+      await axiosClient.post("/auth/verify-email", JSON.stringify(data)),
     {
       onSuccess: () => {
         navigate("/");
