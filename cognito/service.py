@@ -5,6 +5,7 @@ from django.core.cache import cache
 from pycognito import Cognito
 from rest_framework.request import Request
 
+from cognito.models import CognitoUser
 from data_science_admin_tool.settings import COGNITO_CONFIG
 
 cognitoClient = boto3.client("cognito-idp")
@@ -73,6 +74,9 @@ class CognitoService:
                     {"Name": "email_verified", "Value": "true"},
                 ],
             )
+            user: CognitoUser = CognitoUser.objects.get(email=username)
+            user.email_verified = True
+            user.save()
         except Exception as e:
             print(e)
 
