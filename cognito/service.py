@@ -13,18 +13,18 @@ cognitoClient = boto3.client("cognito-idp")
 class CognitoService:
     """AWS Cognito service."""
 
-    def __get_cache_token_keys(self, request: Request) -> tuple[str, str, str]:
+    def __get_cache_token_keys(self, username: str) -> tuple[str, str, str]:
         """Get the name keys of the cached tokens.
 
         Args:
-            request (Request): the request.
+            username (str): the email/username of the user.
 
         Returns:
             tuple[str, str, str]: the id, access, and refresh tokens — respectively.
         """
-        id_key = f"id_token_{request.user.get_username()}"
-        access_key = f"access_token_{request.user.get_username()}"
-        refresh_key = f"refresh_token_{request.user.get_username()}"
+        id_key = f"id_token_{username}"
+        access_key = f"access_token_{username}"
+        refresh_key = f"refresh_token_{username}"
 
         return (id_key, access_key, refresh_key)
 
@@ -44,30 +44,19 @@ class CognitoService:
         cache.set(f"access_token_{u.username}", u.access_token, None)
         cache.set(f"refresh_token_{u.username}", u.refresh_token, None)
 
-    def send_verification(self, request: Request) -> None:
+    def send_verification(self, username: str) -> None:
         """Send a verification code to user.
 
         Args:
-            request (Request): the request.
+            username (str): the email/username of the user.
         """
         try:
-            id_key, access_key, refresh_key = self.__get_cache_token_keys(request)
-
-            id_token = cache.get(id_key)
-            access_token = cache.get(access_key)
-            refresh_token = cache.get(refresh_key)
-
-            u = Cognito(
-                **COGNITO_CONFIG,
-                id_token=id_token,
-                access_token=access_token,
-                refresh_token=refresh_token,
-            )
-            u.send_verification()
+            u = Cognito(**COGNITO_CONFIG)
+            u.resend_confirmation_code(username)
         except Exception as e:
             print(e)
 
-    def confirm_verification(self, request: Request, code: str) -> None:
+    def confirm_verification(self, username: str, code: str) -> None:
         """confirm_verification.
 
         Args:
@@ -75,10 +64,8 @@ class CognitoService:
             code (str): code
         """
         try:
-            u = Cognito(
-                **COGNITO_CONFIG,
-            )
-            u.confirm_sign_up(code, username=request.user.get_username())
+            u = Cognito(**COGNITO_CONFIG)
+            u.confirm_sign_up(code, username=username)
         except Exception as e:
             print(e)
 
@@ -89,7 +76,9 @@ class CognitoService:
             request (Request): the request to logout.
         """
         try:
-            id_key, access_key, refresh_key = self.__get_cache_token_keys(request)
+            id_key, access_key, refresh_key = self.__get_cache_token_keys(
+                request.user.get_username()
+            )
             access_token = cache.get(access_key)
             Cognito(**COGNITO_CONFIG, access_token=access_token).logout()
 

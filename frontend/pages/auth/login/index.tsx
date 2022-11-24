@@ -15,7 +15,9 @@ const LoginPage = () => {
 
   // Form
   const { form, validation } = useLoginForm();
-  const { handleSubmit } = form;
+  const { handleSubmit, watch } = form;
+
+  const email = watch("email");
 
   // Mutation
   const { mutate } = useMutation<
@@ -43,7 +45,7 @@ const LoginPage = () => {
           error.response?.status === 403 &&
           error.response?.data.detail === "Need verification"
         ) {
-          navigate("/404");
+          navigate(`/confirm?username=${email}`);
         }
       },
     }

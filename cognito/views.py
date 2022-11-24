@@ -1,6 +1,7 @@
 """Views for Cognito app."""
 
 from django.contrib.auth import authenticate, login, logout
+from django.core.exceptions import BadRequest
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.parsers import JSONParser
@@ -100,7 +101,7 @@ class EmailVerification(APIView):
     """Email verification view."""
 
     authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
 
     def get(self, request: Request) -> Response:
         """Send a verification code to the user.
@@ -111,8 +112,13 @@ class EmailVerification(APIView):
         Returns:
             Response: the response.
         """
+        username = request.query_params.get("username")
+
+        if username is None:
+            raise BadRequest("Must have username query param")
+
         try:
-            CognitoService().send_verification(request)
+            CognitoService().send_verification(username)
             return Response("OK", status=HTTP_200_OK)
         except Exception:
             return Response(None, status=HTTP_404_NOT_FOUND)
@@ -126,9 +132,11 @@ class EmailVerification(APIView):
         Returns:
             Response: the response.
         """
+        username = request.data["username"]
         code = request.data["code"]
+
         try:
-            CognitoService().confirm_verification(request, code)
+            CognitoService().confirm_verification(username, code)
             return Response("OK", status=HTTP_200_OK)
         except Exception:
             return Response(None, status=HTTP_404_NOT_FOUND)
