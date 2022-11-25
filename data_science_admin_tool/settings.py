@@ -187,4 +187,5 @@ JAZZMIN_SETTINGS = {
             "url": os.environ["APP_URL"],
         },
     ],
+    "site_logo": "img/logo.svg",
 }
