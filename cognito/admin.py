@@ -1,5 +1,6 @@
 """Custom admin configuration."""
 
+import re
 from typing import Any
 
 from django.contrib import admin
@@ -49,7 +50,6 @@ class UserCreationForm(ModelForm):  # type: ignore
 
         user = super().save(commit=False)
         user.set_password(password)
-
         try:
             CognitoService().create_user(email, password)
         except Exception as e:
@@ -98,6 +98,31 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ("email",)
     ordering = ("email",)
 
+    def has_delete_permission(self, request: HttpRequest, obj: None = None) -> bool:
+        """Determine if the user can delete users.
+
+        Admins can delete all users but themselves.
+
+        Args:
+            request (HttpRequest): the request.
+
+        Returns:
+            bool: whether they have permission to delete.
+        """
+        uuid_regex = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+
+        match = re.search(uuid_regex, request.path)
+
+        # If no matching UUID, then not allowed
+        if match is None:
+            return False
+
+        # If the same user, not allowed to delete
+        if match.group() == str(request.user.id):
+            return False
+
+        return True
+
     def delete_model(self, request: HttpRequest, obj: CognitoUser) -> None:
         """Delete the user from Cognito and from DB.
 
@@ -109,7 +134,7 @@ class UserAdmin(BaseUserAdmin):
         to_delete_username = obj.get_username()
 
         if current_username == to_delete_username:
-            return None
+            raise ValidationError("Cannot delete yourself")
 
         CognitoService().delete_user(to_delete_username)
 
