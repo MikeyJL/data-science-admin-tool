@@ -181,6 +181,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 JAZZMIN_SETTINGS = {
     "site_title": "DSAT Admin",
     "welcome_sign": "Welcome to DSAT Admin",
+    "usermenu_links": [
+        {
+            "name": "Support",
+            "url": "https://github.com/farridav/django-jazzmin/issues",
+            "new_window": True,
+        },
+    ],
     "topmenu_links": [
         {
             "name": "Visit App",
@@ -189,3 +196,5 @@ JAZZMIN_SETTINGS = {
     ],
     "site_logo": "img/logo.svg",
 }
+
+JAZZMIN_UI_TWEAKS = {"navbar_fixed": True}
